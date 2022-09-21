@@ -26,7 +26,7 @@ Route::prefix('v1')->group(function () {
      *
      */
     Route::prefix('events')->group(function () {
-        Route::get('/',[EventController::class,'index'])->name('api_routes');
+        Route::get('/',[EventController::class,'index']);
         Route::get('/active-event',[EventController::class,'event_status']);
         Route::post('/', [EventController::class,'store']);
         Route::get('{id}',[EventController::class,'show']);
