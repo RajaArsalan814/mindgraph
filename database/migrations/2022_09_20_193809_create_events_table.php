@@ -17,8 +17,8 @@ class CreateEventsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('start_at')->nullable();
-            $table->string('end_at')->nullable();
+            $table->timestamp('start_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('end_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
             $table->softDeletes();
         });

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
-
 class EventController extends Controller
 {
     /**
@@ -16,17 +15,18 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::get();
-        return response()->json($events);
+        return response()->json($events,200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function event_status()
     {
-        //
+
+        $events = Event::where('start_at', '<=', Carbon::now('UTC')->toDateTimeString())
+                    ->where('end_at', '>=', Carbon::now('UTC')->toDateTimeString())
+                    ->get();
+
+        return response()->json($events,200);
     }
 
     /**
@@ -41,7 +41,7 @@ class EventController extends Controller
         $events->name = $request->name;
         $events->slug = $request->slug;
         $events->save();
-        return response()->json($events);
+        return response()->json($events,200);
     }
 
     /**
@@ -53,18 +53,7 @@ class EventController extends Controller
     public function show($id)
     {
         $events = Event::findOrFail($id);
-        return response()->json($events);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return response()->json($events,200);
     }
 
     /**
@@ -76,6 +65,8 @@ class EventController extends Controller
      */
     public function updateorcreate(Request $request, $id)
     {
+
+
         if (Event::find($id)) {
             return response()->json('Already in system.');
         }else{
@@ -83,7 +74,7 @@ class EventController extends Controller
             $events->name = $request->name;
             $events->slug = $request->slug;
             $events->save();
-            return response()->json($events);
+            return response()->json($events,200);
         }
     }
 
@@ -98,7 +89,7 @@ class EventController extends Controller
     {
         $events = Event::find($id);
         $events->update($request->all());
-        return response()->json($events);
+        return response()->json($events,200);
     }
 
     /**
@@ -109,7 +100,7 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        $event = Event::destroy($id);
-        return response()->json('Event Deleted');
+        $events = Event::where('id',$id)->delete();
+        return response()->json('Event Deleted',200);
     }
 }
